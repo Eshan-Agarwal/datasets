@@ -390,22 +390,12 @@ class DownloadManager(object):
 
 
 # ============================================================================
-# In Python 2.X, threading.Condition.wait() cannot be interrupted by SIGINT,
-# unless it's given a timeout. Here we artificially give a long timeout to
-# allow ctrl+C.
-# This code should be deleted once python2 is no longer supported.
-if sys.version_info[0] > 2:
 
-  def _wait_on_promise(p):
-    return p.get()
-
-else:
-
-  def _wait_on_promise(p):
-    while True:
-      result = p.get(sys.maxint)  # pylint: disable=g-deprecated-member-used
-      if p.is_fulfilled:
-        return result
+def _wait_on_promise(p):
+  while True:
+    result = p.get(sys.maxint)  # pylint: disable=g-deprecated-member-used
+    if p.is_fulfilled:
+      return result
 
 # ============================================================================
 
