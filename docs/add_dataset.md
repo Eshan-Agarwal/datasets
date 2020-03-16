@@ -570,6 +570,8 @@ To create this checksum file the first time, you can use the
 `tensorflow_datasets.scripts.download_and_prepare` script and pass the flags
 `--register_checksums --checksums_dir=/path/to/checksums_dir`.
 
+Note: Naming format of the files in checksum directory must be name of the dataset class in lower cases with underscores. Example: `cats_vs_dogs.txt` or `mnist.txt`. Also you have to set `register_checksums = True` for [DownloadConfig](https://github.com/tensorflow/datasets/blob/v2.1.0/tensorflow_datasets/core/download/download_manager.py#L48-L96).
+
 ### 2. Adjust the fake example directory
 
 For testing, instead of using the default
