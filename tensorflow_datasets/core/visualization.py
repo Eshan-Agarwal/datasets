@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Lint as: python3
 """Visualization tools and utils.
 """
 
@@ -28,11 +27,11 @@ from tensorflow_datasets.core import features as features_lib
 from tensorflow_datasets.core import lazy_imports_lib
 
 
-def show_examples(ds_info, ds, rows=3, cols=3, plot_scale=3., image_key=None):
-  """Visualize images (and labels) from an image classification dataset.
+def show_examples(ds_info, ds, rows=3, cols=3, plot_scale=3., image_key=None, video_key=None):
+  """Visualize images (and labels) from an image classification dataset & Video Data.
 
   Only works with datasets that have 1 image feature and optionally 1 label
-  feature (both inferred from `ds_info`). Note the dataset should be unbatched.
+  feature (both inferred from `ds_info`) and video dataset. Note the dataset should be unbatched.
   Requires matplotlib to be installed.
 
   This function is for interactive use (Colab, Jupyter). It displays and return
@@ -59,31 +58,42 @@ def show_examples(ds_info, ds, rows=3, cols=3, plot_scale=3., image_key=None):
       the labels to get overlapped.
     image_key: `string`, name of the feature that contains the image. If not
        set, the system will try to auto-detect it.
+    video_key: `string`, name of the feature that contains the video. If not
+       set, the system will try to auto-detect it.
 
   Returns:
-    fig: The `matplotlib.Figure` object
+    fig: The `matplotlib.Figure` object or video GIF for video dataset.
   """
   plt = lazy_imports_lib.lazy_imports.matplotlib.pyplot
 
-  if not image_key:
+  if not image_key and not video_key:
     # Infer the image and label keys
     image_keys = [
         k for k, feature in ds_info.features.items()
         if isinstance(feature, features_lib.Image)
     ]
+    video_keys = [
+        k for k, feature in ds_info.features.items()
+        if isinstance(feature, features_lib.Video)
+    ]
 
-    if not image_keys:
-      raise ValueError(
-          "Visualisation not supported for dataset `{}`. Was not able to "
-          "auto-infer image.".format(ds_info.name))
-
+    if not image_keys and not video_keys:
+      if not image_keys:
+        raise ValueError(
+          "Visualisation not supported for dataset `{}`. Was not able to"
+            "auto-infer image.".format(ds_info.name))
+      else:
+        raise ValueError(
+            "show_examples supported only for Video/Supervised image dataset")
     if len(image_keys) > 1:
       raise ValueError(
           "Multiple image features detected in the dataset. Using the first one. You can "
           "use `image_key` argument to override. Images detected: %s" %
           (",".join(image_keys)))
 
-    image_key = image_keys[0]
+    if image_keys:
+      image_key = image_keys[0]
+
 
   label_keys = [
       k for k, feature in ds_info.features.items()
@@ -94,37 +104,67 @@ def show_examples(ds_info, ds, rows=3, cols=3, plot_scale=3., image_key=None):
   if not label_key:
     logging.info("Was not able to auto-infer label.")
 
-  num_examples = rows * cols
-  examples = list(dataset_utils.as_numpy(ds.take(num_examples)))
-
-  fig = plt.figure(figsize=(plot_scale*cols, plot_scale*rows))
-  fig.subplots_adjust(hspace=1/plot_scale, wspace=1/plot_scale)
-  for i, ex in enumerate(examples):
-    if not isinstance(ex, dict):
-      raise ValueError(
+  if image_key or video_key:
+    num_examples = rows * cols
+    examples = list(dataset_utils.as_numpy(ds.take(num_examples)))
+    print(examples)
+    fig = plt.figure(figsize=(plot_scale*cols, plot_scale*rows))
+    fig.subplots_adjust(hspace=1/plot_scale, wspace=1/plot_scale)
+    for i, ex in enumerate(examples):
+      if not isinstance(ex, dict):
+        raise ValueError(
           "tfds.show_examples requires examples as `dict`, with the same "
           "structure as `ds_info.features`. It is currently not compatible "
           "with `as_supervised=True`. Received: {}".format(type(ex)))
-    ax = fig.add_subplot(rows, cols, i+1)
+      ax = fig.add_subplot(rows, cols, i+1)
 
-    # Plot the image
-    image = ex[image_key]
-    if len(image.shape) != 3:
-      raise ValueError(
-          "Image dimension should be 3. tfds.show_examples does not support "
-          "batched examples or video.")
-    _, _, c = image.shape
-    if c == 1:
-      image = image.reshape(image.shape[:2])
-    ax.imshow(image, cmap="gray")
-    ax.grid(False)
-    plt.xticks([], [])
-    plt.yticks([], [])
+      if image_key:
 
-    # Plot the label
-    if label_key:
-      label = ex[label_key]
-      label_str = ds_info.features[label_key].int2str(label)
-      plt.xlabel("{} ({})".format(label_str, label))
-  plt.show()
-  return fig
+        # Plot the image
+        image = ex[image_key]
+        if len(image.shape) != 3:
+          raise ValueError(
+              "Image dimension should be 3. tfds.show_examples does not support "
+              "batched examples or video.")
+        _, _, c = image.shape
+        if c == 1:
+          image = image.reshape(image.shape[:2])
+        ax.imshow(image, cmap="gray")
+        ax.grid(False)
+        plt.xticks([], [])
+        plt.yticks([], [])
+
+        # Plot the label
+        if label_key:
+          label = ex[label_key]
+          label_str = ds_info.features[label_key].int2str(label)
+          plt.xlabel("{} ({})".format(label_str, label))
+
+      if video_key:
+        
+        # Plot the image
+        video_key = ex[video_key]
+        if len(video_key.shape) != 3:
+          raise ValueError(
+              "Image dimension should be 3. tfds.show_examples does not support "
+              "batched examples or video.")
+        _, _, c = video_key.shape
+        if c == 1:
+          video_key = video_key.reshape(video_key.shape[:2])
+        ax.imshow(video_key, cmap="gray")
+        ax.grid(False)
+        plt.xticks([], [])
+        plt.yticks([], [])
+
+        # Plot the label
+        if label_key:
+          label = ex[label_key]
+          label_str = ds_info.features[label_key].int2str(label)
+          plt.xlabel("{} ({})".format(label_str, label))
+    plt.show()
+    return fig
+
+
+  
+
+
