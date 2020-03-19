@@ -26,7 +26,7 @@ from tensorflow_datasets.image import plant_village
 
 class PlantVillageTest(testing.DatasetBuilderTestCase):
   DATASET_CLASS = plant_village.PlantVillage
-  SPLITS = {"train": 38}
+  SPLITS = {"train": 35}
 
 
 if __name__ == "__main__":
