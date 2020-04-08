@@ -20,11 +20,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from tensorflow_datasets import testing
+import tensorflow_datasets as tfds
 from tensorflow_datasets.core import _sharded_files
 
 
-class GetReadInstructionsTest(testing.TestCase):
+class GetReadInstructionsTest(tfds.testing.TestCase):
 
   def test_read_all_even_sharding(self):
     # Even sharding
