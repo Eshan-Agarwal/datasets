@@ -280,3 +280,32 @@ ${display_builder(builder, all_sections)}
 % else:
 ${display_all_builders(config_builders)}
 % endif
+
+<%!
+  import requests
+  
+  def dataset_examples_paths(ds_name):
+    github_path = 
+"https://github.com/Eshan-Agarwal/datasets/tree/patch--58/docs/catalog/images/" + ds_name + ".jpg"
+    return github_path
+  
+  def example_exists(path):
+    r = requests.head(path)
+    return r.status_code == 302 
+%>
+<%def name="example_exists(path)">
+    ${path}
+</%def>
+<%def name="dataset_examples_paths(ds_name)">
+     ${ds_name}
+</%def>
+% if example_exists((dataset_examples_paths(builder.info.name))):
+* Figure
+ 
+ ![](${dataset_examples_paths(builder.info.name)}) 
+ 
+% else:
+ * Figure:
+        No Example available for this dataset.
+% endif
+
