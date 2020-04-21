@@ -37,7 +37,7 @@ FLAGS = flags.FLAGS
 FIG_DIR = os.path.join('..', 'docs', 'catalog', 'images')
 flags.DEFINE_string('dst_dir', tfds.core.get_tfds_path(FIG_DIR),
                     'Path to destination directory')
-
+DATASET_TO_TESTS = ['cats_vs_dogs', 'mnist', 'groove', 'flic']
 def generate_single_visualization(builder):
     """Save the generated figures for the dataset
     Args:
@@ -68,7 +68,7 @@ def generate_single_visualization(builder):
         except ValueError:
             print("Visualisation not supported for dataset `{}`".format(config_name))
 
-def generate_visualization(datasets=None):
+def generate_visualization(datasets=DATASET_TO_TESTS):
 
     module_to_builder = make_module_to_builder_dict(datasets)
     sections = sorted(list(module_to_builder.keys()))
@@ -77,8 +77,9 @@ def generate_visualization(datasets=None):
         builders = tf.nest.flatten(module_to_builder[section])
         builders = sorted(builders, key=lambda b: b.name)
         with futures.ThreadPoolExecutor(max_workers=WORKER_COUNT_DATASETS) as tpool:
-            builder_examples = tpool.map(generate_single_visualization, builders)
-
+            tpool.map(generate_single_visualization, builders)
+            tpool.shutdown(wait=True)
+      
 def main(_):
     """Main script."""
     generate_visualization()
