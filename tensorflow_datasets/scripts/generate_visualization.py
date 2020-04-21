@@ -37,15 +37,12 @@ FLAGS = flags.FLAGS
 FIG_DIR = os.path.join('..', 'docs', 'catalog', 'images')
 flags.DEFINE_string('dst_dir', tfds.core.get_tfds_path(FIG_DIR),
                     'Path to destination directory')
-DATASET_TO_TESTS = ['cats_vs_dogs', 'mnist', 'groove', 'flic']
+
 def generate_single_visualization(builder):
     """Save the generated figures for the dataset
     Args:
       data_name: name of the dataset
     """
-    config_name = os.path.split(builder.info.full_name)[-2]
-    print("Generating examples %s..." % config_name)
-
     dataset_config_list = []
     if builder.builder_configs:
         for config in builder.BUILDER_CONFIGS:
@@ -54,21 +51,22 @@ def generate_single_visualization(builder):
         dataset_config_list.append(builder.name)
 
     for data_name in dataset_config_list:
+        print("Generating examples %s..." % data_name)
         split = list(builder.info.splits.keys())[0]
         data, data_info = tfds.load(data_name, split=split, with_info=True)
 
         suffix = data_name.replace("/", "-")
-        data_path = os.path.join(FLAGS.dst_dir, suffix+ ".jpg")
+        data_path = os.path.join(FLAGS.dst_dir, suffix+ ".png")
         if not tf.io.gfile.exists(FLAGS.dst_dir):
             tf.io.gfile.mkdir(FLAGS.dst_dir)
 
         try:    
             figure = tfds.show_examples(data_info, data)
-            figure.savefig(data_path, optimize=True)
+            figure.savefig(data_path)
         except ValueError:
-            print("Visualisation not supported for dataset `{}`".format(config_name))
+            print("Visualisation not supported for dataset `{}`".format(data_name))
 
-def generate_visualization(datasets=DATASET_TO_TESTS):
+def generate_visualization(datasets=None):
 
     module_to_builder = make_module_to_builder_dict(datasets)
     sections = sorted(list(module_to_builder.keys()))
@@ -77,9 +75,8 @@ def generate_visualization(datasets=DATASET_TO_TESTS):
         builders = tf.nest.flatten(module_to_builder[section])
         builders = sorted(builders, key=lambda b: b.name)
         with futures.ThreadPoolExecutor(max_workers=WORKER_COUNT_DATASETS) as tpool:
-            tpool.map(generate_single_visualization, builders)
-            tpool.shutdown(wait=True)
-      
+            builder_examples = tpool.map(generate_single_visualization, builders)
+
 def main(_):
     """Main script."""
     generate_visualization()

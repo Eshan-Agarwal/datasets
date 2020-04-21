@@ -38,7 +38,7 @@ flags.DEFINE_string('tfds_dir', tfds.core.utils.tfds_dir(),
                     'Path to tensorflow_datasets directory')
 
 # Datasets you want to test the script on.
-DATASET_TO_TESTS = ['cats_vs_dogs', 'mnist', 'groove', 'flic']
+DATASET_TO_TESTS = ['mnist', 'cats_vs_dogs', 'groove', 'flic']
 
 def doc_examples(data_name, path):
     """Write dataset documents with figures."""
