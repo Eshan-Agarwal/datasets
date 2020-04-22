@@ -48,7 +48,7 @@ def doc_examples(data_name, path):
 def main(_):
     """Main script."""
     # Generate examples/figures for datasets.
-    generate_visualization(DATASET_TO_TESTS)
+    #generate_visualization(DATASET_TO_TESTS)
     # Document datasets with generated figures.
     for data_name in DATASET_TO_TESTS:
         doc_examples(data_name, doc_full_path)

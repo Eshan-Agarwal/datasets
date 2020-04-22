@@ -37,6 +37,8 @@ captured on a Roland TD-11 V-Drum electronic drum kit.
     Year = {2019},
 }
 ```
+*   **Figure**:
+    No Example available for groove.
 
 
 ## groove/full-midionly (default config)
@@ -72,9 +74,6 @@ FeaturesDict({
     'type': ClassLabel(shape=(), dtype=tf.int64, num_classes=2),
 })
 ```
-*   **Figure**:
-    No Example available for groove/full-midionly.
-
 
 ## groove/full-16000hz 
 
@@ -110,9 +109,6 @@ FeaturesDict({
     'type': ClassLabel(shape=(), dtype=tf.int64, num_classes=2),
 })
 ```
-*   **Figure**:
-    No Example available for groove/full-16000hz.
-
 
 ## groove/2bar-midionly 
 
@@ -147,9 +143,6 @@ FeaturesDict({
     'type': ClassLabel(shape=(), dtype=tf.int64, num_classes=2),
 })
 ```
-*   **Figure**:
-    No Example available for groove/2bar-midionly.
-
 
 ## groove/2bar-16000hz 
 
@@ -185,9 +178,6 @@ FeaturesDict({
     'type': ClassLabel(shape=(), dtype=tf.int64, num_classes=2),
 })
 ```
-*   **Figure**:
-    No Example available for groove/2bar-16000hz.
-
 
 ## groove/4bar-midionly 
 
@@ -222,5 +212,3 @@ FeaturesDict({
     'type': ClassLabel(shape=(), dtype=tf.int64, num_classes=2),
 })
 ```
-*   **Figure**:
-    No Example available for groove/4bar-midionly.
