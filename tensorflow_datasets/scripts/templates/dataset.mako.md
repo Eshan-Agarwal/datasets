@@ -174,7 +174,7 @@ ${builder.info.citation}
   ds_name_config = config_name.replace("\\", "/").replace("/", "_")
 
   def dataset_examples_paths(ds_name):
-    github_path = "https://" + "github.com/Eshan-Agarwal/datasets/blob/patch-58/docs/catalog/images/" + ds_name + ".jpg"
+    github_path = "https://" + "github.com/Eshan-Agarwal/datasets/blob/patch-58/docs/catalog/images/" + ds_name + ".png"
     return github_path
 
   def example_exists(path):
