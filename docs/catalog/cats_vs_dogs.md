@@ -58,4 +58,4 @@ edition = {Proceedings of 14th ACM Conference on Computer and Communications Sec
 }
 ```
 *   **Figure**:
-    No Example available for cats_vs_dogs.
+    ![](https://github.com/Eshan-Agarwal/datasets/blob/patch-58/docs/catalog/images/cats_vs_dogs.png)
