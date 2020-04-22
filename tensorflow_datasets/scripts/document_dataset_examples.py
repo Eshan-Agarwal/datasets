@@ -33,12 +33,10 @@ import tensorflow_datasets as tfds
 from tensorflow_datasets.scripts import document_datasets
 from tensorflow_datasets.scripts.generate_visualization import generate_visualization
 
-FLAGS = flags.FLAGS
-flags.DEFINE_string('tfds_dir', tfds.core.utils.tfds_dir(),
-                    'Path to tensorflow_datasets directory')
-
+doc_dir = os.path.join("..", "docs", "catalog")
+doc_full_path = tfds.core.get_tfds_path(doc_dir)
 # Datasets you want to test the script on.
-DATASET_TO_TESTS = ['mnist', 'cats_vs_dogs', 'groove', 'flic']
+DATASET_TO_TESTS = ['cats_vs_dogs', 'groove', 'imagewang', 'flic']
 
 def doc_examples(data_name, path):
     """Write dataset documents with figures."""
@@ -47,12 +45,8 @@ def doc_examples(data_name, path):
         doc_builder = document_datasets.document_single_builder(builder)
         file.write(doc_builder)
 
-
 def main(_):
     """Main script."""
-    doc_dir = os.path.join("..", "docs", "catalog")
-    doc_full_path = os.path.join(FLAGS.tfds_dir, doc_dir)
-
     # Generate examples/figures for datasets.
     generate_visualization(DATASET_TO_TESTS)
     # Document datasets with generated figures.
