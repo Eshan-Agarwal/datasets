@@ -78,7 +78,7 @@ FeaturesDict({
     ([documentation](https://www.tensorflow.org/datasets/performances#auto-caching)):
     No
 *   **Figure**:
-    ![](https://github.com/Eshan-Agarwal/datasets/blob/patch-58/docs/catalog/images/imagewang-full-size.png) 
+    ![](/content/datasets/tensorflow_datasets/../docs/catalog/images/imagewang-full-size.png) 
 
 ## imagewang/320px 
 
@@ -88,7 +88,7 @@ FeaturesDict({
     ([documentation](https://www.tensorflow.org/datasets/performances#auto-caching)):
     No
 *   **Figure**:
-    ![](https://github.com/Eshan-Agarwal/datasets/blob/patch-58/docs/catalog/images/imagewang-320px.png) 
+    ![](/content/datasets/tensorflow_datasets/../docs/catalog/images/imagewang-320px.png) 
 
 ## imagewang/160px 
 
@@ -98,4 +98,4 @@ FeaturesDict({
     ([documentation](https://www.tensorflow.org/datasets/performances#auto-caching)):
     Yes
 *   **Figure**:
-    ![](https://github.com/Eshan-Agarwal/datasets/blob/patch-58/docs/catalog/images/imagewang-160px.png)
+    ![](/content/datasets/tensorflow_datasets/../docs/catalog/images/imagewang-160px.png)

@@ -167,19 +167,24 @@ ${builder.info.citation}
 
 <%def name="display_figure(builder)">\
 <%
-  import requests
   import os
+  import tensorflow as tf
+  import tensorflow_datasets as tfds
+
+  fig_dir = os.path.join('..', 'docs', 'catalog', 'images')
+  image_path = tfds.core.get_tfds_path(fig_dir)
 
   config_name = os.path.split(builder.info.full_name)[-2]
   ds_name_config = config_name.replace("/", "-")
 
   def dataset_examples_paths(ds_name):
-    github_path = "https://" + "github.com/Eshan-Agarwal/datasets/blob/patch-58/docs/catalog/images/" + ds_name + ".png"
+    github_path = os.path.join(image_path, ds_name + ".png")
     return github_path
-
+  
   def example_exists(path):
-    res = requests.get(path)
-    return res.status_code==200
+    if tf.io.gfile.exists(path):
+        return True 
+
 %>\
 *   **Figure**:
 % if example_exists((dataset_examples_paths(ds_name_config))):

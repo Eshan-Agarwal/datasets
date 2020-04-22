@@ -45,16 +45,17 @@ def generate_single_visualization(data_name):
     """
 
     print("Generating examples %s..." % data_name)
+    print("DATANAME : ", data_name)
     builder = tfds.builder(data_name)
     split = list(builder.info.splits.keys())[0]
     data, data_info = tfds.load(data_name, split=split, with_info=True)
 
-    suffix = data_name.replace("/", "-")
-    data_path = os.path.join(FLAGS.dst_dir, suffix+ ".png")
     if not tf.io.gfile.exists(FLAGS.dst_dir):
         tf.io.gfile.mkdir(FLAGS.dst_dir)
 
-    try:    
+    try:
+        suffix = data_name.replace("/", "-")
+        data_path = os.path.join(FLAGS.dst_dir, suffix+ ".png")
         figure = tfds.show_examples(data_info, data)
         figure.savefig(data_path)
     except ValueError:
@@ -81,7 +82,7 @@ def generate_visualization(datasets=None):
 
     dataset_config_list = get_config_names(datasets)
     with futures.ThreadPoolExecutor(max_workers=WORKER_COUNT_DATASETS) as tpool:
-        builder_examples = tpool.map(generate_single_visualization, list(dataset_config_list))
+        builder_examples = tpool.map(generate_single_visualization, dataset_config_list)
 
 def main(_):
     """Main script."""
