@@ -188,7 +188,7 @@ ${builder.info.citation}
 %>\
 *   **Figure**:
 % if example_exists((dataset_examples_paths(ds_name_config))):
-    ![](${dataset_examples_paths(ds_name_config)}) 
+    ![](${os.path.join("images",ds_name_config+".png")}) 
 % else:
     No Example available for ${os.path.split(builder.info.full_name)[-2]}.
 

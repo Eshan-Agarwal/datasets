@@ -75,7 +75,7 @@ FeaturesDict({
 
 *   **Download size**: `286.35 MiB`
 *   **Figure**:
-    ![](/content/datasets/tensorflow_datasets/../docs/catalog/images/flic-small.png) 
+    ![](images/flic-small.png) 
 
 ## flic/full 
 
@@ -83,4 +83,4 @@ FeaturesDict({
 
 *   **Download size**: `1.10 GiB`
 *   **Figure**:
-    ![](/content/datasets/tensorflow_datasets/../docs/catalog/images/flic-full.png)
+    ![](images/flic-full.png)
