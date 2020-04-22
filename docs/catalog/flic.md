@@ -75,8 +75,7 @@ FeaturesDict({
 
 *   **Download size**: `286.35 MiB`
 *   **Figure**:
-    No Example available for flic/small.
-
+    ![](https://github.com/Eshan-Agarwal/datasets/blob/patch-58/docs/catalog/images/flic-small.png) 
 
 ## flic/full 
 
@@ -84,4 +83,4 @@ FeaturesDict({
 
 *   **Download size**: `1.10 GiB`
 *   **Figure**:
-    No Example available for flic/full.
+    ![](https://github.com/Eshan-Agarwal/datasets/blob/patch-58/docs/catalog/images/flic-full.png)

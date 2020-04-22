@@ -171,10 +171,10 @@ ${builder.info.citation}
   import os
 
   config_name = os.path.split(builder.info.full_name)[-2]
-  ds_name_config = config_name.replace("\\", "/").replace("/", "_")
+  ds_name_config = config_name.replace("/", "-")
 
   def dataset_examples_paths(ds_name):
-    github_path = "https://" + "github.com/Eshan-Agarwal/datasets/blob/patch-58/docs/catalog/images/" + ds_name + ".jpg"
+    github_path = "https://" + "github.com/Eshan-Agarwal/datasets/blob/patch-58/docs/catalog/images/" + ds_name + ".png"
     return github_path
 
   def example_exists(path):
