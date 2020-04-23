@@ -24,38 +24,39 @@ Args:
 import os
 from absl import app
 from absl import flags
-import collections
 from concurrent import futures
 
 import tensorflow as tf
 import tensorflow_datasets as tfds
 from tensorflow_datasets.core import registered
 
-WORKER_COUNT_DATASETS = 200
+WORKER_COUNT_DATASETS = 4
 
 FLAGS = flags.FLAGS
 FIG_DIR = os.path.join('..', 'docs', 'catalog', 'images')
 flags.DEFINE_string('dst_dir', tfds.core.get_tfds_path(FIG_DIR),
-                    'Path to destination directory')
-
+                    'Path to tensorflow_datasets/docs/catalog/images')
+DATASET_TO_TESTS = ['cats_vs_dogs', 'mnist', 'imagewang', 'flic', 'beans', 'fashion_mnist', 'colorectal_histology', 'kmnist', 'mnist_corrupted', 'omniglot']
 def generate_single_visualization(data_name):
-    """Save the generated figures for the dataset
-    Args:
-      data_name: name of the dataset
-    """
+    """Save the generated figures for the dataset in dst_dir.
 
+    Args:
+      data_name: name of the dataset with or without config for which
+      generate figure.
+    """
     print("Generating examples %s..." % data_name)
-    print("DATANAME : ", data_name)
+    suffix = data_name.replace("/", "-")
+    data_path = os.path.join(FLAGS.dst_dir, suffix+ ".png")
+
+    if tf.io.gfile.exists(data_path):
+        return  # If the image already exists, skip the image generation
     builder = tfds.builder(data_name)
     split = list(builder.info.splits.keys())[0]
     data, data_info = tfds.load(data_name, split=split, with_info=True)
 
     if not tf.io.gfile.exists(FLAGS.dst_dir):
         tf.io.gfile.mkdir(FLAGS.dst_dir)
-
     try:
-        suffix = data_name.replace("/", "-")
-        data_path = os.path.join(FLAGS.dst_dir, suffix+ ".png")
         figure = tfds.show_examples(data_info, data)
         figure.savefig(data_path)
     except ValueError:
@@ -63,10 +64,18 @@ def generate_single_visualization(data_name):
 
 
 def get_config_names(datasets=None):
+    """List all dataset names with or without config.
+
+    Args:
+        datasets: list of datasets for which to generate figures.
+              If None, then all available datasets will be used.
+
+    Returns:
+        List of dataset names with or without config.
+    """
     dataset_config_list = []
     if not datasets:
-        dataset_config_list = [x for x in registered.list_config_names()]
-        return dataset_config_list
+        return registered.list_config_names()
     else:
         for data_name in datasets:
           builder = tfds.builder(data_name)
@@ -79,14 +88,19 @@ def get_config_names(datasets=None):
 
 
 def generate_visualization(datasets=None):
+    """Generate Visualization for datasets.
 
+    Args:
+        datasets: list of datasets for which to generate figures.
+              If None, then all available datasets will be used.
+    """
     dataset_config_list = get_config_names(datasets)
     with futures.ThreadPoolExecutor(max_workers=WORKER_COUNT_DATASETS) as tpool:
         builder_examples = tpool.map(generate_single_visualization, dataset_config_list)
 
 def main(_):
     """Main script."""
-    generate_visualization()
+    generate_visualization(DATASET_TO_TESTS)
 
 if __name__ == "__main__":
     app.run(main)
