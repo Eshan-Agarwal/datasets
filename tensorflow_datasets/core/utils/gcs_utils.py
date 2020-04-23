@@ -86,8 +86,8 @@ def download_gcs_dataset(
 
   # Filter out the diffs folder if present
   filter_prefix = posixpath.join(prefix, "diffs")
-  gcs_paths_to_dl = [p for p in gcs_paths_to_dl
-                     if not p.startswith(filter_prefix)]
+  gcs_paths_to_dl = sorted([p for p in gcs_paths_to_dl
+                     if not p.startswith(filter_prefix)])
 
   with utils.async_tqdm(
       total=len(gcs_paths_to_dl), desc="Dl Completed...", unit=" file") as pbar:
